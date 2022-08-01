@@ -141,6 +141,15 @@ export function dbProjectionUsers(prefix = '') {
   };
 }
 
+export function dbProjectionUsersWoutCompany(prefix = '') {
+  return {
+    [`${prefix}password`]: 0,
+    [`${prefix}email`]: 0,
+    [`${prefix}emailVerified`]: 0,
+    [`${prefix}companyId`]: 0,
+  };
+}
+
 export function dbProjectionUsersWithEmail(prefix = '') {
   return {
     [`${prefix}password`]: 0,

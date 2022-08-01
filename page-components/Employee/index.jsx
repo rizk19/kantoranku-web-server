@@ -16,9 +16,11 @@ export const Employee = () => {
   return (
     <div className={styles.root}>
       <Spacer size={1} axis="vertical" />
-      <Button type="success" onClick={handleShow}>
-        Add Member
-      </Button>
+      <div className={styles.container}>
+        <Button type="secondary" onClick={handleShow}>
+          Add Member
+        </Button>
+      </div>
       <Spacer size={1} axis="vertical" />
       <EmployeeList />
       <EmployeeModal show={isModalShow} handleShow={handleShow} />

@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import { dbProjectionUsers } from './user';
+import { dbProjectionUsers, dbProjectionUsersWoutCompany } from './user';
 import { dbProjectionCompany } from './company';
 
 export async function findPostById(db, id) {
@@ -17,11 +17,13 @@ export async function findPostById(db, id) {
         },
       },
       { $unwind: '$creator' },
-      { $project: dbProjectionUsers('creator.') },
+      { $project: dbProjectionUsersWoutCompany('creator.') },
     ])
     .toArray();
   if (!posts[0]) return null;
-  return posts[0];
+  let temp = posts[0];
+  delete temp['companyId'];
+  return temp;
 }
 
 export async function findPosts(db, before, by, limit = 10) {

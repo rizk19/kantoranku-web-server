@@ -40,8 +40,7 @@ const columns = [
 ];
 
 const EmployeeList = () => {
-  const { data2, error } = useEmployeePages();
-  console.log('erroremployee', error);
+  const { data2 } = useEmployeePages();
 
   const table = useReactTable({
     data: data2 && data2.users ? data2.users : [],
