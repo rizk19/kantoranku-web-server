@@ -1,4 +1,5 @@
 import { ObjectId } from 'mongodb';
+import { dbProjectionUsersWithEmail } from './user';
 
 //masih rusak
 export async function findAttendanceUserToday(db, creatorId) {
@@ -26,7 +27,9 @@ export async function findAttendanceById(db, id) {
   return db
     .collection('attendance')
     .findOne({ _id: new ObjectId(id) })
-    .then((attendance) => attendance || null);
+    .then((attendance) => {
+      return attendance || null;
+    });
 }
 
 export async function findAttendanceUser(db, creatorId) {
@@ -36,11 +39,48 @@ export async function findAttendanceUser(db, creatorId) {
     .then((attendance) => attendance || null);
 }
 
-export async function findAttendanceByCompany(db, companyId) {
+export async function findAttendanceByCompany(
+  db,
+  companyId,
+  startDate,
+  endDate,
+  limit = 10
+) {
+  const today = new Date();
+
+  let start = new Date(startDate ? startDate : today);
+  //   start.setDate(start.getDate() - 4);
+  start.setHours(0, 0, 0, 0);
+
+  let end = new Date(endDate ? endDate : today);
+  //   end.setDate(end.getDate() - 4);
+  end.setHours(23, 59, 59, 999);
+  let matchQuery = {
+    ...(companyId && { companyId: new ObjectId(companyId) }),
+  };
+  if (startDate && endDate) {
+    matchQuery = { ...matchQuery, ...{ createdAt: { $gte: start, $lt: end } } };
+  }
   return db
     .collection('attendance')
-    .find({ companyId: new ObjectId(companyId) })
-    .then((attendance) => attendance || null);
+    .aggregate([
+      {
+        $match: matchQuery,
+      },
+      { $sort: { _id: 1 } },
+      { $limit: limit },
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'creatorId',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      { $unwind: '$user' },
+      { $project: dbProjectionUsersWithEmail('user.') },
+    ])
+    .toArray();
 }
 
 export async function updateAttendanceById(db, id, data) {
