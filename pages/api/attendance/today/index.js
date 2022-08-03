@@ -99,7 +99,7 @@ handler.get(async (req, res) => {
       res
         .status(403)
         //   .json({ error: { message: 'You have not checked in today' } });
-        .json({ error: { message: 'You have not checked in' } })
+        .json({ error: { message: 'You have not logged in' } })
     );
   const db = await getMongoDb();
   if (req.query && Object.keys(req.query).length != 0 && req.query.id) {

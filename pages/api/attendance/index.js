@@ -4,6 +4,7 @@ import {
   insertAttendance,
   findAttendanceUserToday,
   findAttendanceById,
+  findAttendanceByCompany,
 } from '@/api-lib/db';
 import { auths, validateBody } from '@/api-lib/middlewares';
 import { getMongoDb } from '@/api-lib/mongodb';
@@ -99,26 +100,26 @@ handler.get(async (req, res) => {
       res
         .status(403)
         //   .json({ error: { message: 'You have not checked in today' } });
-        .json({ error: { message: 'You have not checked in' } })
+        .json({ error: { message: 'You have not logged in' } })
     );
   const db = await getMongoDb();
-  if (req.query && Object.keys(req.query).length != 0 && req.query.id) {
+  if (req.query && req.query.id) {
     const attendanceById = await findAttendanceById(
       db,
       req.query.id ? req.query.id : undefined
     );
     res.json({ ...attendanceById });
   } else {
-    const attendance = await findAttendanceUserToday(
+    const attendance = await findAttendanceByCompany(
       db,
-      req.user._id ? req.user._id : undefined
+      req.user.companyId ? req.user.companyId : undefined,
+      req.query.startDate ? req.query.startDate : null,
+      req.query.endDate ? req.query.endDate : null
     );
     if (attendance && Object.keys(attendance.length > 0)) {
-      res.json({ ...attendance });
+      res.json(attendance);
     } else {
-      res
-        .status(403)
-        .json({ error: { message: 'You have not checked in today' } });
+      res.status(403).json({ error: { message: 'No data' } });
     }
   }
 });

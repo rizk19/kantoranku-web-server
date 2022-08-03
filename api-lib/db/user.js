@@ -154,5 +154,7 @@ export function dbProjectionUsersWithEmail(prefix = '') {
   return {
     [`${prefix}password`]: 0,
     [`${prefix}emailVerified`]: 0,
+    [`${prefix}companyId`]: 0,
+    [`${prefix}bio`]: 0,
   };
 }
