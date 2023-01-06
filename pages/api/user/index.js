@@ -6,6 +6,7 @@ import {
   findPhotosByFileName,
 } from '@/api-lib/db';
 import { auths, validateBody } from '@/api-lib/middlewares';
+import { ObjectId } from 'mongodb';
 import { getMongoDb } from '@/api-lib/mongodb';
 import { ncOpts } from '@/api-lib/nc';
 import { slugUsername } from '@/lib/user';
@@ -66,18 +67,11 @@ handler.patch(
       // );
       // const countCursor = images.estimatedDocumentCount()
       // const cursor = images.find({});
-      const theImageName = `${req.files[0].filename}`;
+      const theImageName = `${req.files[0] && req.files[0].filename}`;
       const uploadedImage = await findPhotosByFileName(db, theImageName);
       if (uploadedImage) {
-        profilePicture =
-          process.env.WEB_URI + `api/img/${uploadedImage.filename}`;
+        profilePicture = `${uploadedImage.filename}`;
       }
-      // const image = await cloudinary.uploader.upload(req.file.path, {
-      //   width: 512,
-      //   height: 512,
-      //   crop: 'fill',
-      // });
-      // profilePicture = image.secure_url;
     }
     const { name, bio } = req.body;
 
@@ -102,7 +96,12 @@ handler.patch(
       ...(typeof bio === 'string' && { bio }),
       ...(profilePicture && { profilePicture }),
     });
-
+    if (user.companyId) {
+      const compData = await db
+        .collection('company')
+        .findOne({ _id: new ObjectId(user.companyId) });
+      user.companyName = compData.name;
+    }
     res.json({ user });
   }
 );
