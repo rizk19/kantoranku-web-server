@@ -66,3 +66,7 @@ package-lock.json
 yarn.lock
 
 .vercel
+
+# DS Store
+*.DS_Store
+
