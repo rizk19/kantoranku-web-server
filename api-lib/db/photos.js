@@ -33,3 +33,17 @@ export async function findPdfByFileName(db, filename) {
     .findOne({ filename })
     .then((photo) => photo || null);
 }
+
+export function findAndDeletePhotosByName(db, filename) {
+  return db
+    .collection(process.env.MONGO_IMG_BUCKET + '.files')
+    .findOneAndDelete({ filename })
+    .then(({ value }) => value);
+}
+
+export function findAndDeletePdfByName(db, filename) {
+  return db
+    .collection(process.env.MONGO_PDF_BUCKET + '.files')
+    .findOneAndDelete({ filename })
+    .then((res) => res);
+}
