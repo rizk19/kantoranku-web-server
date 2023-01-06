@@ -8,7 +8,7 @@ export const storage = GridFsStorage({
   file: (req, file) => {
     const match = ['image/png', 'image/jpeg', 'application/pdf'];
     const splitName = file.originalname.toLowerCase().split(' ').join('_');
-    const theFName = `${Date.now()}-raycorp-${splitName}`;
+    const theFName = `${Date.now()}-${splitName}`;
     if (match.indexOf(file.mimetype) === 2) {
       return {
         bucketName: process.env.MONGO_PDF_BUCKET,
