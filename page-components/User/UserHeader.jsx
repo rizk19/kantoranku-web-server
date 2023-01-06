@@ -3,10 +3,15 @@ import { Container } from '@/components/Layout';
 import styles from './UserHeader.module.css';
 
 const UserHeader = ({ user }) => {
+  const urlEnv = process.env.NEXT_PUBLIC_WEB_URI;
   return (
     <Container className={styles.root} column alignItems="center">
       <div className={styles.avatar}>
-        <Avatar size={168} username={user.username} url={user.profilePicture} />
+        <Avatar
+          size={168}
+          username={user.username}
+          url={`${urlEnv}api/img/${user.profilePicture}`}
+        />
       </div>
       <h1>
         <div className={styles.name}>{user.name}</div>

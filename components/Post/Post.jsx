@@ -7,6 +7,7 @@ import { useMemo } from 'react';
 import styles from './Post.module.css';
 
 const Post = ({ post, className }) => {
+  const urlEnv = process.env.NEXT_PUBLIC_WEB_URI;
   const timestampTxt = useMemo(() => {
     const diff = Date.now() - new Date(post.createdAt).getTime();
     if (diff < 1 * 60 * 1000) return 'Just now';
@@ -19,11 +20,19 @@ const Post = ({ post, className }) => {
           <Container className={styles.creator}>
             <Avatar
               size={36}
-              url={post.creator.profilePicture}
+              url={`${urlEnv}api/img/${post.creator.profilePicture}`}
               username={post.creator.username}
             />
             <Container column className={styles.meta}>
-              <p className={styles.name}>{post.creator.name}</p>
+              <p className={styles.name}>
+                {post.creator.name}
+                {post.company && post.company.name && (
+                  <span className={styles.nameCompany}>
+                    &nbsp;[
+                    {post.company.name}]
+                  </span>
+                )}
+              </p>
               <p className={styles.username}>{post.creator.username}</p>
             </Container>
           </Container>

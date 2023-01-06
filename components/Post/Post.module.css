@@ -33,6 +33,14 @@
   line-height: 20px;
 }
 
+.nameCompany {
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--secondary);
+  margin: 0;
+  line-height: 20px;
+}
+
 .username {
   font-size: 0.875rem;
   font-weight: 400;

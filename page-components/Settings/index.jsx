@@ -114,6 +114,7 @@ const Auth = () => {
 };
 
 const AboutYou = ({ user, mutate }) => {
+  const urlEnv = process.env.NEXT_PUBLIC_WEB_URI;
   const usernameRef = useRef();
   const nameRef = useRef();
   const bioRef = useRef();
@@ -179,7 +180,11 @@ const AboutYou = ({ user, mutate }) => {
         <Spacer size={0.5} axis="vertical" />
         <span className={styles.label}>Your Avatar</span>
         <div className={styles.avatar}>
-          <Avatar size={96} username={user.username} url={avatarHref} />
+          <Avatar
+            size={96}
+            username={user.username}
+            url={`${urlEnv}api/img/${avatarHref}`}
+          />
           <input
             aria-label="Your Avatar"
             type="file"

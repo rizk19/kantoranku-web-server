@@ -13,6 +13,7 @@ import toast from 'react-hot-toast';
 import styles from './Poster.module.css';
 
 const PosterInner = ({ user }) => {
+  const urlEnv = process.env.NEXT_PUBLIC_WEB_URI;
   const contentRef = useRef();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -44,7 +45,11 @@ const PosterInner = ({ user }) => {
   return (
     <form onSubmit={onSubmit}>
       <Container className={styles.poster}>
-        <Avatar size={40} username={user.username} url={user.profilePicture} />
+        <Avatar
+          size={40}
+          username={user.username}
+          url={`${urlEnv}api/img/${user.profilePicture}`}
+        />
         <Input
           ref={contentRef}
           className={styles.input}

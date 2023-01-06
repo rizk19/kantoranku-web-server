@@ -15,6 +15,7 @@ import Wrapper from './Wrapper';
 const UserMenu = ({ user, mutate }) => {
   const menuRef = useRef();
   const avatarRef = useRef();
+  const urlEnv = process.env.NEXT_PUBLIC_WEB_URI;
 
   const [visible, setVisible] = useState(false);
 
@@ -62,7 +63,12 @@ const UserMenu = ({ user, mutate }) => {
         ref={avatarRef}
         onClick={() => setVisible(!visible)}
       >
-        <Avatar size={32} username={user.username} url={user.profilePicture} />
+        {/* <Avatar size={32} username={user.username} url={user.profilePicture} /> */}
+        <Avatar
+          size={32}
+          username={user.username}
+          url={`${urlEnv}api/img/${user.profilePicture}`}
+        />
       </button>
       <div
         ref={menuRef}
